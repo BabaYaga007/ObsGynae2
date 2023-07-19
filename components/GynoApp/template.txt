@@ -1,0 +1,39 @@
+import { useState } from "react";
+import { ScrollView, View, Text, TextInput, Button } from "react-native";
+import { styles } from "../assets/Style/styles";
+
+export default function Antenatal({ navigation }) {
+  function submitHandler() {
+    const formData = {};
+    console.log(formData);
+  }
+
+  return (
+    <View style={styles.container}>
+      {/* <View style={styles.heading}>
+        <Text>Antinatal Card Details</Text>
+      </View> */}
+      <ScrollView style={styles.contentContainer}>
+        <View style={styles.ques}>
+          <Text style={styles.quesText}>BG</Text>
+          <TextInput style={styles.textInput} />
+        </View>
+        <View style={styles.ques}>
+          <Text style={styles.quesText}>Full Name</Text>
+          <TextInput
+            style={styles.textInput}
+            placeholder="FirstName LastName"
+          />
+        </View>
+        <View style={styles.naviButton}>
+          {/* <Button title="Next" onPress={submitHandler} /> */}
+          <Button
+            title="Next"
+            onPress={() => navigation.navigate("Antenatal")}
+          />
+          <Button title="Back" onPress={() => navigation.goBack()} />
+        </View>
+      </ScrollView>
+    </View>
+  );
+}
