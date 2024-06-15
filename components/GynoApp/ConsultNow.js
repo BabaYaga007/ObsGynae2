@@ -12,13 +12,65 @@ import {
   Image,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
-// import FlashMessage, {showMessage} from "react-native-flash-message";
-import FlashMessage, {
-  showMessage,
-  hideMessage,
-} from 'react-native-flash-message';
+import PatCard from './PatCard';
+import {useAppContext} from '../AppContext';
 
-export default function ConsultNow({navigation}) {
+export default function ConsultNow({navigation, route}) {
+  const PatInfo = route.params;
+
+  const {docNmc, docName, clinicId} = useAppContext();
+
+  const [presCompl, setPresCompl] = useState('');
+  const [medHistory, setMedHistory] = useState('');
+  const [presNotes, setPresNotes] = useState('');
+  const [investRec, setPresInvest] = useState('');
+
+  let Presc_data = {
+    Presc_id: Math.floor(Math.random() * 10000000),
+    patId: PatInfo.patient_id,
+    patName: PatInfo.pat_name,
+    patAge: PatInfo.pat_age,
+    patPhone: PatInfo.pat_phone,
+    patHeight: PatInfo.pat_height,
+    patGender: PatInfo.pat_gender,
+    // invest_upl1,
+    // docNmc,
+    // clinicId,
+    // docName,
+  };
+
+  function handleNext() {
+    // if (!presCompl) {
+    //   alert('Please fill Presenting Complaints');
+    //   return;
+    // }
+    // if (!medHistory) {
+    //   alert('Please fill Medical History');
+    //   return;
+    // }
+    // // if (!presNotes) {
+    // //   alert('Please fill Notes');
+    // //   return;
+    // // }
+
+    // if (!investRec) {
+    //   alert('Please fill Investigation Records');
+    //   return;
+    // }
+
+    Presc_data = {
+      ...Presc_data,
+      presCompl,
+      medHistory,
+      presNotes,
+      investRec,
+    };
+
+    console.log('In Consultation ' + Presc_data);
+
+    navigation.navigate('Prescription', Presc_data);
+  }
+
   return (
     <View style={styles.container}>
       {/* <View> */}
@@ -27,36 +79,12 @@ export default function ConsultNow({navigation}) {
       {/* </View> */}
       <ScrollView style={styles.contentContainer}>
         {/* <View style={{ marginTop: 0 }}> */}
-        <TouchableOpacity
-          style={{
-            // borderWidth: 2,
-            // borderColor: "grey",
-            marginVertical: 10,
-            borderRadius: 20,
-            backgroundColor: '#bdf0d2',
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <Image
-              source={require('../../assets/icons/female.png')}
-              style={{
-                height: 40,
-                width: 40,
-                marginHorizontal: 20,
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-            <View style={{alignSelf: 'center'}}>
-              <Text style={{fontSize: 22, color: 'grey'}}>
-                Achint Srivastava
-              </Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>
-                Number: 1234567890
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <PatCard
+          Id={PatInfo.patient_id}
+          Name={PatInfo.pat_name}
+          Age={PatInfo.pat_age}
+          Num={PatInfo.pat_phone}
+        />
         {/* </View> */}
 
         {/* <View style={{ marginTop: 15 }}> */}
@@ -67,6 +95,8 @@ export default function ConsultNow({navigation}) {
             multiline
             placeholder="Presenting Complaints"
             placeholderTextColor="grey"
+            value={presCompl}
+            onChangeText={value => setPresCompl(value)}
           />
         </View>
         {/* </View> */}
@@ -78,6 +108,8 @@ export default function ConsultNow({navigation}) {
             multiline
             placeholder="Medical History"
             placeholderTextColor="grey"
+            onChangeText={value => setMedHistory(value)}
+            value={medHistory}
           />
         </View>
 
@@ -88,58 +120,59 @@ export default function ConsultNow({navigation}) {
             multiline
             placeholder="Notes"
             placeholderTextColor="grey"
+            onChangeText={value => setPresNotes(value)}
+            value={presNotes}
           />
         </View>
 
         <View style={styles.ques2}>
-          <Text style={styles.quesText}>Investigation Results</Text>
+          <Text style={styles.quesText}>Investigation Records</Text>
           <TextInput
             style={styles.textInput}
+            multiline
             placeholder="Investigations Record"
             placeholderTextColor="grey"
+            onChangeText={value => setPresInvest(value)}
+            value={investRec}
           />
         </View>
 
-        {/* <View>
+        {/* <View>s
           <TouchableOpacity></TouchableOpacity>
         </View> */}
 
-        <View>
-          <TouchableOpacity
-            style={styles.button_to}
-            onPress={() =>
-              showMessage({
-                message: 'Investigations uploaded',
-                type: 'info',
-              })
-            }>
+        {/* <View>
+          <TouchableOpacity style={styles.button_to}>
             <Text style={styles.button_to_text}>Upload Investigations</Text>
           </TouchableOpacity>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
-          {/* <Button title="Next" onPress={submitHandler} /> */}
+        </View> */}
 
+        <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
           <TouchableOpacity
             style={styles.button_to}
             onPress={() => navigation.goBack()}>
             <Text style={styles.button_to_text}>Previous</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button_to}
-            onPress={() => navigation.navigate('Prescription')}>
+          <TouchableOpacity style={styles.button_to} onPress={handleNext}>
             <Text style={styles.button_to_text}>Next</Text>
           </TouchableOpacity>
           {/* </View> */}
         </View>
-        <FlashMessage
-          position="bottom"
-          floating="true"
-          style={{backgroundColor: 'grey'}}
-          titleStyle={{fontSize: 20}}
-          duration={2000}
-        />
       </ScrollView>
+      {/* <FlashMessage
+        position="bottom"
+        floating="true"
+        style={{
+          backgroundColor: 'grey',
+          height: 55,
+          alignSelf: 'center',
+          // padding: 0,
+        }}
+        titleStyle={{fontSize: 18}}
+        // statusBarHeight={10}
+        duration={2000}
+      /> */}
     </View>
   );
 }

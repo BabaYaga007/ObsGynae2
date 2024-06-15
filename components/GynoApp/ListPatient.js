@@ -1,4 +1,9 @@
-import {useState} from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+/* eslint-disable react-native/no-inline-styles */
+/* eslint-disable prettier/prettier */
+import React from 'react';
+import {useState, useEffect, useRef} from 'react';
+import {useFocusEffect} from '@react-navigation/native';
 import {
   ScrollView,
   FlatList,
@@ -9,32 +14,79 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  Dimensions,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
 import {SearchBar} from '@rneui/themed';
+import {useAppContext} from '../AppContext';
+import GetPatients from './DBfiles/GetPatients';
 
 export default function ListPatient({navigation}) {
+  const {docNmc} = useAppContext();
+
   const [searchItem, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  // const [originalData, setOriginalData] = useState([]); // Added for preserving original data
+  const originalDataRef = useRef([]); // useRef to persist original data
 
-  function handleSearch(text) {
-    // Handle search logic here
+  // useEffect(() => {
+  //   DisplayPat()
+  //     .then(result => {
+  //       setData(result);
+  //       originalDataRef.current = result; // Save original data to the ref
+  //     })
+  //     .catch(error => {
+  //       console.log('Error fetching data: ', error);
+  //     });
+  //   // });
+  // }, []); //the dependancy array, if removed keeps calling the fetch query
+
+  // const response = GetPatients(docNmc);
+  // console.log(response);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Code inside this block will run every time the screen is focused
+      console.log('Entering useFocusEffect callback');
+
+      // For example, you can call DisplayPat() again to refresh the data
+      GetPatients(docNmc)
+        .then(result => {
+          setData(result);
+          originalDataRef.current = result;
+          // console.log('Pat data: -', result);
+        })
+        .catch(error => {
+          console.log('Error fetching data: ', error);
+        });
+    }, []),
+  );
+
+  /// Creating a Loopable component
+
+  const handleSearch = text => {
     setSearch(text);
-    console.log('Search text:', text);
-  }
+    const filteredData = originalDataRef.current.filter(item =>
+      item.pat_name.toLowerCase().includes(text.toLowerCase()),
+    );
 
+    // console.log(filteredData);
+    setData(filteredData);
+  };
+
+  const clearSearch = () => {
+    setSearch('');
+    setData(originalDataRef.current); // Restore original data
+  };
+
+  const screenWidth = Dimensions.get('window').width;
   return (
     <View style={styles.container}>
-      <View>
-        {/* <Text style={styles.heading}>List of Patients</Text> */}
-        {/* <Text>Prescriptions</Text> */}
-      </View>
       {/* <View style={styles.contentContainer}> */}
       <SearchBar
-        placeholder="Search by Name or Phone"
+        placeholder="Search by Name"
         onChangeText={handleSearch}
         value={searchItem}
-        // You can customize the SearchBar props as per your requirements
-        // For example, you can set inputStyle, containerStyle, etc.
         containerStyle={{
           borderRadius: 20,
           padding: 0,
@@ -48,276 +100,63 @@ export default function ListPatient({navigation}) {
           // margin: 5,
         }}
         inputStyle={{color: 'grey'}}
+        onCancel={clearSearch} // Call clearSearch when the search is canceled
       />
 
-      {/* Add your other components and content here */}
-      {/* </View> */}
-      {/* Create a database query to fetch patients alphabetically */}
-      <ScrollView style={styles.contentContainer}>
-        <View style={{marginTop: 0}}>
+      <FlatList
+        data={data}
+        keyExtractor={item => item.patient_id}
+        contentContainerStyle={{
+          width: screenWidth * 0.8,
+          paddingTop: 10,
+          // borderColor: 'black',
+          // borderWidth: 1,
+          alignSelf: 'center', // Align the FlatList to the center horizontally
+        }}
+        renderItem={({item}) => (
           <TouchableOpacity
+            onPress={() => navigation.navigate('PatInfo', item)}
             style={{
               // borderWidth: 2,
               // borderColor: "grey",
-              marginVertical: 10,
+
+              width: '100%',
+              marginVertical: 5,
               borderRadius: 20,
               backgroundColor: '#bdf0d2',
             }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-evenly'}}
+              key={item.patient_id}>
+              <View
+                // source={require('../../assets/icons/female.png')}
                 style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
+                  // height: 40,
+                  // width: 40,
+                  // marginHorizontal: 5,
                   justifyContent: 'center',
                   alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
+                }}>
                 <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
+                  ID: {item.patient_id}
                 </Text>
               </View>
-            </View>
-
-            {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                marginTop: 10,
-              }}
-            >
-              <Text style={{ fontSize: 16 }}>More Details</Text>
-              <Image
-                source={require("../assets/icons/arrow_right.png")}
-                style={{ height: 40, width: 40, marginHorizontal: 10 }}
-              />
-            </View> */}
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
               <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
+                <Text style={{fontSize: 22, color: 'black'}}>
+                  {item.pat_name}
                 </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
                 <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
+                  DOB: {item.pat_dob}
+                </Text>
+                <Text style={{fontSize: 18, color: 'grey'}}>
+                  Number: {item.pat_phone}
                 </Text>
               </View>
             </View>
           </TouchableOpacity>
+        )}
+      />
 
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{
-              // borderWidth: 2,
-              // borderColor: "grey",
-              marginVertical: 10,
-              borderRadius: 20,
-              backgroundColor: '#bdf0d2',
-            }}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Image
-                source={require('../../assets/icons/female.png')}
-                style={{
-                  height: 40,
-                  width: 40,
-                  marginHorizontal: 20,
-                  justifyContent: 'center',
-                  alignSelf: 'center',
-                }}
-              />
-              <View style={{alignSelf: 'center'}}>
-                <Text style={{fontSize: 22, color: 'grey'}}>
-                  Achint Srivastava
-                </Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-                <Text style={{fontSize: 18, color: 'grey'}}>
-                  Number: 1234567890
-                </Text>
-              </View>
-            </View>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
       <View style={styles.naviButton}>
         {/* <Button title="Next" onPress={submitHandler} /> */}
         <TouchableOpacity

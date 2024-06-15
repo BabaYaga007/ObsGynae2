@@ -11,8 +11,29 @@ import {
   Image,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
+import PatCard from './PatCard';
 
-export default function Provisional({navigation}) {
+export default function Provisional({navigation, route}) {
+  let Presc_data = route.params;
+
+  const [provDiag, setProvDiag] = useState('');
+
+  function handleNext() {
+    // if (!provDiag) {
+    //   alert('Please fill Provisional Diagnosis');
+    //   return;
+    // }
+
+    Presc_data = {
+      ...Presc_data,
+      provDiag: provDiag,
+    };
+
+    console.log('In Provisional', Presc_data);
+
+    navigation.navigate('Medicines', Presc_data);
+  }
+
   return (
     <View style={styles.container}>
       {/* <View> */}
@@ -21,48 +42,25 @@ export default function Provisional({navigation}) {
       {/* </View> */}
       <ScrollView style={styles.contentContainer}>
         {/* <View style={{ marginTop: 0 }}> */}
-        <TouchableOpacity
-          style={{
-            // borderWidth: 2,
-            // borderColor: "grey",
-            marginVertical: 10,
-            borderRadius: 20,
-            backgroundColor: '#bdf0d2',
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <Image
-              source={require('../../assets/icons/female.png')}
-              style={{
-                height: 40,
-                width: 40,
-                marginHorizontal: 20,
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-            <View style={{alignSelf: 'center'}}>
-              <Text style={{fontSize: 22, color: 'grey'}}>
-                Achint Srivastava
-              </Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>
-                Number: 1234567890
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
+        <PatCard
+          Id={Presc_data.patId}
+          Name={Presc_data.patName}
+          Age={Presc_data.patAge}
+          Num={Presc_data.patPhone}
+        />
         {/* </View> */}
 
         {/* <View style={{ marginTop: 15 }}> */}
         <View style={styles.ques2}>
+          <Text style={styles.quesText}>Provisional Diagnosis</Text>
           <TextInput
             style={styles.textInput}
+            multiline
+            value={provDiag}
             placeholder="Provisional Diagnosis"
             placeholderTextColor="grey"
+            onChangeText={value => setProvDiag(value)}
           />
-          {/* <Text style={{ marginBottom: 5 }}>
-            Pressing Complaints of patient and duration
-          </Text> */}
         </View>
         {/* </View> */}
 
@@ -75,9 +73,7 @@ export default function Provisional({navigation}) {
             <Text style={{fontSize: 18, fontWeight: '600'}}>Previous</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button_to}
-            onPress={() => navigation.navigate('Treatment')}>
+          <TouchableOpacity style={styles.button_to} onPress={handleNext}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>Next</Text>
           </TouchableOpacity>
           {/* </View> */}

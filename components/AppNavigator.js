@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // Import required dependencies
 import React, {useEffect, useRef} from 'react';
 import {Image, Text} from 'react-native';
@@ -7,8 +8,8 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 // Import your screen components
 import Logo from './GynoApp/LogoPage';
-import SignIn from './GynoApp/sign_in';
-import Register from './GynoApp/register';
+import SignIn from './GynoApp/sign_in2';
+import Register from './GynoApp/register2';
 import Dashboard from './GynoApp/Dashboard';
 import Appointment from './GynoApp/Appointment';
 import Profile from './GynoApp/Profile';
@@ -19,17 +20,40 @@ import ConsultNow from './GynoApp/ConsultNow';
 import Prescription from './GynoApp/Prescription';
 import AntePres from './GynoApp/AntenatalPres';
 import Obstetric from './GynoApp/Obstetric';
-import UsgReport from './GynoApp/UsgReport';
-import AnteExam from './GynoApp/AnteExam';
+import UsgReport from './GynoApp/Old_Pages/UsgReport';
+import AnteExam from './GynoApp/Old_Pages/AnteExam';
 import InferPres from './GynoApp/InferPres';
-import PatInvest from './GynoApp/PatientInvest';
-import HusbInvest from './GynoApp/HusbInvest';
+import PatInvest from './GynoApp/Old_Pages/PatientInvest';
+import HusbInvest from './GynoApp/Old_Pages/HusbInvest';
 import SurgPro from './GynoApp/SurgPro';
 import Physical from './GynoApp/PhyExam';
 import Provisional from './GynoApp/Provisional';
 import InvestAdvice from './GynoApp/InvestAdvice';
 import Medicines from './GynoApp/Meds';
-import Treatment from './GynoApp/Treatment';
+// import Prev_presc from './GynoApp/Old_Pages/Prev_presc';
+import ObsteTable from './GynoApp/Tables/ObsteTable';
+import Vitals from './GynoApp/Tables/Vitals';
+import AnteTable from './GynoApp/Tables/AnteTable';
+import USGTable from './GynoApp/Tables/USGTable';
+import AnteMonit from './GynoApp/Tables/AnteMonit';
+import FemPartner from './GynoApp/Tables/FemPartner';
+import HusbPartner from './GynoApp/Tables/HusbPartner';
+import EditMed from './GynoApp/EditMed';
+import EditMed2 from './GynoApp/EditMed2';
+import AddAssistant from './GynoApp/AddAssistant';
+import PatInfo from './GynoApp/PatInfo';
+import PrevInvoice from './GynoApp/PrevInvoice';
+import ForgotPass from './GynoApp/ForgotPass';
+import Schedule from './GynoApp/schedule';
+import PatCard from './GynoApp/PatCard';
+import UpdatePatient from './GynoApp/UpdatePatient';
+import AddPatient2 from './GynoApp/AddPatient2';
+import PreviewSurg from './GynoApp/Templates/PreviewSurg';
+import PreviewInfy from './GynoApp/Templates/PreviewInfy';
+import PreviewAnc from './GynoApp/Templates/PreviewAnc';
+import PreviewPrsc from './GynoApp/Templates/PreviewPrsc';
+import PreviewPrsc2 from './GynoApp/Templates/PreviewPrsc2';
+import PreviewObs from './GynoApp/Templates/PreviewObs';
 
 function LogoScreen({navigation}) {
   // const navigation = useNavigation();
@@ -157,18 +181,19 @@ function DrawerNavigator() {
         name="Tabs"
         component={TabNavigator}
         // options={{headerShown: false}}   //it works
-        options={{title: 'Dashboard'}}
+        options={{title: 'ObsGynae'}}
       />
       <Drawer.Screen
-        name="Appointments"
-        component={Appointment}
-        options={{title: 'Appointments'}}
+        name="Schedule"
+        component={Schedule}
+        options={{title: ' Schedule Appointment'}}
       />
       <Drawer.Screen
-        name="Assistant "
-        component={Empty}
-        options={{title: 'Manage Assistant'}}
+        name="Assistant"
+        component={AddAssistant}
+        options={{title: 'Add Assistant'}}
       />
+
       <Drawer.Screen
         name="Settings "
         component={Empty}
@@ -196,6 +221,7 @@ const AppNavigator = () => {
           color: 'blue',
         },
         headerTitleAlign: 'center',
+        headerStatusBarHeight: -10,
       }}
       initialRouteName="FirstPage">
       <Stack.Screen
@@ -212,7 +238,7 @@ const AppNavigator = () => {
       <Stack.Screen
         name="Register"
         component={Register}
-        // options={{ title: "" }}
+        options={{title: "Doctor's Registration"}}
         // options={{ headerShown: false }}
       />
       <Stack.Screen
@@ -255,7 +281,7 @@ const AppNavigator = () => {
         component={Obstetric}
         options={{title: 'Obstetric History'}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="USGReport"
         component={UsgReport}
         options={{title: 'USG Report'}}
@@ -263,23 +289,23 @@ const AppNavigator = () => {
       <Stack.Screen
         name="AnteExam"
         component={AnteExam}
-        options={{title: 'Antenatal Examination'}}
-      />
+        options={{title: 'Antenatal Investigations'}}
+      /> */}
       <Stack.Screen
         name="InferPres"
         component={InferPres}
         options={{title: 'Infertility Prescription'}}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="PatInvest"
         component={PatInvest}
         options={{title: 'Patient Investigations'}}
-      />
-      <Stack.Screen
+      /> */}
+      {/* <Stack.Screen
         name="HusbInvest"
         component={HusbInvest}
         options={{title: 'Husband Investigations'}}
-      />
+      /> */}
       <Stack.Screen
         name="SurgPro"
         component={SurgPro}
@@ -305,10 +331,110 @@ const AppNavigator = () => {
         component={Medicines}
         options={{title: 'Medicines Advised'}}
       />
+      {/* <Stack.Screen
+        name="Prev_presc"
+        component={Prev_presc}
+        options={{title: 'Previous Prescription'}}
+      /> */}
       <Stack.Screen
-        name="Treatment"
-        component={Treatment}
-        options={{title: 'Treatment'}}
+        name="PrevInvoice"
+        component={PrevInvoice}
+        options={{title: 'Previous Invoice'}}
+      />
+      <Stack.Screen
+        name="ObsteTable"
+        component={ObsteTable}
+        options={{title: 'Obstetric Table'}}
+      />
+      <Stack.Screen
+        name="AnteTable"
+        component={AnteTable}
+        options={{title: 'Antenatal Investigations'}}
+      />
+      <Stack.Screen
+        name="USGTable"
+        component={USGTable}
+        options={{title: 'USG Investigations'}}
+      />
+      <Stack.Screen
+        name="AnteMonit"
+        component={AnteMonit}
+        options={{title: 'Antenatal Monitoring'}}
+      />
+      <Stack.Screen
+        name="FemPartner"
+        component={FemPartner}
+        options={{title: 'Female Investigations'}}
+      />
+      <Stack.Screen
+        name="HusbPartner"
+        component={HusbPartner}
+        options={{title: 'Husband Investigations'}}
+      />
+      <Stack.Screen
+        name="EditMed"
+        component={EditMed}
+        options={{title: 'Edit Medicine'}}
+      />
+      <Stack.Screen
+        name="EditMed2"
+        component={EditMed2}
+        options={{title: 'Edit Prescription'}}
+      />
+      <Stack.Screen
+        name="PatInfo"
+        component={PatInfo}
+        options={{title: 'Patient Info'}}
+      />
+      <Stack.Screen
+        name="ForgotPass"
+        component={ForgotPass}
+        options={{title: 'Forgot Password ?'}}
+      />
+      <Stack.Screen
+        name="Schedule"
+        component={Schedule}
+        options={{title: 'Schedule Appointment'}}
+      />
+      <Stack.Screen
+        name="UpdatePatient"
+        component={UpdatePatient}
+        options={{title: 'Update Patient Details'}}
+      />
+      <Stack.Screen
+        name="AddPatient2"
+        component={AddPatient2}
+        options={{title: 'Add Patients'}}
+      />
+      {/* <Stack.Screen
+        name="PreviewPrsc"
+        component={PreviewPrsc}
+        options={{title: 'Preview Prescription'}}
+      /> */}
+      <Stack.Screen
+        name="PreviewPrsc"
+        component={PreviewPrsc2}
+        options={{title: 'Preview Prescription'}}
+      />
+      <Stack.Screen
+        name="PreviewSurg"
+        component={PreviewSurg}
+        options={{title: 'Preview Prescription'}}
+      />
+      <Stack.Screen
+        name="PreviewInfy"
+        component={PreviewInfy}
+        options={{title: 'Preview Prescription'}}
+      />
+      <Stack.Screen
+        name="PreviewAnc"
+        component={PreviewAnc}
+        options={{title: 'Preview Prescription'}}
+      />
+      <Stack.Screen
+        name="PreviewObs"
+        component={PreviewObs}
+        options={{title: 'Preview Obstetric Data'}}
       />
     </Stack.Navigator>
   );

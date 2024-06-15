@@ -11,13 +11,21 @@ import {
   Image,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
-// import {SearchBar} from 'react-native-elements';
-import FlashMessage, {
-  showMessage,
-  hideMessage,
-} from 'react-native-flash-message';
+import PatCard from './PatCard';
 
-export default function Invoice({navigation}) {
+export default function Invoice({navigation, route}) {
+  const [amount, setAmount] = useState('');
+  const [procedure, setProcedure] = useState('');
+  const [cash, setCash] = useState('');
+
+  let Presc_data = route.params;
+
+  function handleNext() {
+    console.log('In Invoice', Presc_data);
+
+    navigation.navigate('Dashboard');
+  }
+
   return (
     <View style={styles.container}>
       {/* <View> */}
@@ -26,50 +34,12 @@ export default function Invoice({navigation}) {
       {/* </View> */}
       <ScrollView style={styles.contentContainer}>
         {/* <View style={{ marginTop: 0 }}> */}
-        <TouchableOpacity
-          style={{
-            // borderWidth: 2,
-            // borderColor: "grey",
-            marginVertical: 10,
-            borderRadius: 20,
-            backgroundColor: '#bdf0d2',
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <Image
-              source={require('../../assets/icons/female.png')}
-              style={{
-                height: 40,
-                width: 40,
-                marginHorizontal: 20,
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-            <View style={{alignSelf: 'center'}}>
-              <Text style={{fontSize: 22, color: 'grey'}}>
-                Achint Srivastava
-              </Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>
-                Number: 1234567890
-              </Text>
-            </View>
-          </View>
-
-          {/* <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                marginTop: 10,
-              }}
-            >
-              <Text style={{ fontSize: 16 }}>More Details</Text>
-              <Image
-                source={require("../assets/icons/arrow_right.png")}
-                style={{ height: 40, width: 40, marginHorizontal: 10 }}
-              />
-            </View> */}
-        </TouchableOpacity>
+        <PatCard
+          Id={Presc_data.patId}
+          Name={Presc_data.patName}
+          Age={Presc_data.patAge}
+          Num={Presc_data.patPhone}
+        />
         {/* </View> */}
         <View style={styles.ques2}>
           <Text style={styles.quesText}>Amount</Text>
@@ -77,6 +47,8 @@ export default function Invoice({navigation}) {
             style={styles.textInput}
             placeholder="Amount"
             placeholderTextColor="grey"
+            value={amount}
+            onChangeText={value => setAmount(value)}
           />
         </View>
 
@@ -87,6 +59,8 @@ export default function Invoice({navigation}) {
             placeholder="Consultation / Procedure"
             multiline
             placeholderTextColor="grey"
+            value={procedure}
+            onChangeText={value => setProcedure(value)}
           />
         </View>
 
@@ -96,6 +70,8 @@ export default function Invoice({navigation}) {
             style={styles.textInput}
             placeholder="Cash / Credit"
             placeholderTextColor="grey"
+            value={cash}
+            onChangeText={value => setCash(value)}
           />
         </View>
 
@@ -109,14 +85,7 @@ export default function Invoice({navigation}) {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity
-              style={styles.button_to}
-              onPress={() =>
-                showMessage({
-                  message: 'Invoice Sent to Patient',
-                  type: 'info',
-                })
-              }>
+            <TouchableOpacity style={styles.button_to} onPress={handleNext}>
               <Text style={{fontSize: 18, fontWeight: '600'}}>
                 Send Invoice
               </Text>
@@ -124,19 +93,6 @@ export default function Invoice({navigation}) {
           </View>
         </View>
       </ScrollView>
-      <FlashMessage
-        position="bottom"
-        floating="true"
-        style={{
-          backgroundColor: 'grey',
-          height: 50,
-          alignSelf: 'center',
-          // padding: 0,
-        }}
-        titleStyle={{fontSize: 18}}
-        // statusBarHeight={10}
-        duration={2000}
-      />
     </View>
   );
 }

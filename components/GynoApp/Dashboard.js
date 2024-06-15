@@ -9,6 +9,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
+import {useAppContext} from '../AppContext';
 
 export default function Dashboard({navigation}) {
   //   function submitHandler() {
@@ -16,14 +17,22 @@ export default function Dashboard({navigation}) {
   //     console.log(formData);
   //   }
 
+  const {docNmc, docName, clinicId} = useAppContext();
+
   return (
     <View style={style2.container}>
-      <View style={{flex: 1, marginVertical: 10}}>
-        <Text style={{color: 'black'}}>Hello Dr. ...</Text>
+      <View style={style2.doctorContainer}>
+        <Text style={{color: 'black', fontSize: 20}}>
+          Welcome Dr. {docName}
+        </Text>
       </View>
       {/* <View style={{ flex: 1 }}>
         <Text>Edit your Profile </Text>
       </View> */}
+      <View style={style2.appointContainer}>
+        <Text style={{color: 'black'}}>Next Appointments</Text>
+      </View>
+
       <View style={style2.contentContainer}>
         {/* <View style={{ flex: 1 }}> */}
         <View style={style2.boxView}>
@@ -48,7 +57,7 @@ export default function Dashboard({navigation}) {
           </TouchableOpacity>
         </View>
 
-        <View style={style2.boxView}>
+        {/* <View style={style2.boxView}>
           <TouchableOpacity
             style={style2.box}
             onPress={() => navigation.navigate('Invoice')}>
@@ -66,7 +75,7 @@ export default function Dashboard({navigation}) {
             />
             <Text style={{color: 'black'}}>Records</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View style={style2.boxView}>
           <TouchableOpacity
@@ -100,16 +109,47 @@ const style2 = StyleSheet.create({
     // marginTop: 40,
     // padding: 10,
     // borderWidth: 10,
-    // borderColor: "blue",
+    // backgroundColor: 'blue',
 
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  doctorContainer: {
+    flex: 0.1,
+    marginVertical: 5,
+    // borderColor: 'green',
+    // borderWidth: 2,
     justifyContent: 'center',
+  },
+  appointContainer: {
+    marginHorizontal: 5,
+    marginTop: 5,
+    // borderLeftWidth: 2,
+    // borderRightWidth: 2,
+    // borderWidth: 2,
+    // borderColor: 'red',
+    borderRadius: 20,
+    backgroundColor: 'white',
+    width: '95%',
+    padding: 5,
+    marginBottom: 5,
+    // backgroundColor: "red",
+    flex: 1,
+
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 1,
+      height: 4,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 5,
+    elevation: 8,
   },
   contentContainer: {
     marginHorizontal: 5,
-    marginTop: 10,
+    marginTop: 5,
     // borderLeftWidth: 2,
     // borderRightWidth: 2,
     // borderWidth: 2,
@@ -118,9 +158,9 @@ const style2 = StyleSheet.create({
     backgroundColor: 'white',
     width: '90%',
     padding: 5,
-    marginBottom: 20,
+    marginBottom: 10,
     // backgroundColor: "red",
-    flex: 4,
+    flex: 0.8,
 
     ////////Shadow Properties
     shadowColor: '#000',

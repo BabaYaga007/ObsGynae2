@@ -11,9 +11,36 @@ import {
   Image,
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {SearchBar} from 'react-native-elements';
+import PatCard from './PatCard';
 
-export default function AntePres({navigation}) {
+export default function AntePres({navigation, route}) {
+  const [datePicker, setDatePicker] = useState(false);
+
+  const [date, setDate] = useState(new Date());
+
+  function showDatePicker() {
+    setDatePicker(true);
+  }
+  function onDateSelected(event, value) {
+    setDate(value);
+    setDatePicker(false);
+  }
+  let Presc_data = route.params;
+
+  const handleNext = () => {
+    Presc_data = {
+      ...Presc_data,
+      lmp: date.toDateString(),
+      // lmp: date,
+    };
+
+    console.log('In Antenatal Prescription', Presc_data);
+
+    navigation.navigate('Obstetric', Presc_data);
+  };
+
   return (
     <View style={styles.container}>
       {/* <View> */}
@@ -21,88 +48,70 @@ export default function AntePres({navigation}) {
       {/* <Text>Prescriptions</Text> */}
       {/* </View> */}
       <ScrollView style={styles.contentContainer}>
-        {/* <View style={{ marginTop: 0 }}> */}
-        <TouchableOpacity
-          style={{
-            // borderWidth: 2,
-            // borderColor: "grey",
-            marginVertical: 10,
-            borderRadius: 20,
-            backgroundColor: '#bdf0d2',
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <Image
-              source={require('../../assets/icons/female.png')}
-              style={{
-                height: 40,
-                width: 40,
-                marginHorizontal: 20,
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
+        <PatCard
+          Id={Presc_data.patId}
+          Name={Presc_data.patName}
+          Age={Presc_data.patAge}
+          Num={Presc_data.patPhone}
+        />
+
+        <View style={styles.ques}>
+          <Text style={styles.quesText}>Choose LMP Date</Text>
+
+          {/* <View style={styles.ques}> */}
+          {/* <Text style={styles.quesText}>Date of Birth</Text> */}
+          {datePicker && (
+            <DateTimePicker
+              value={date}
+              mode={'date'}
+              display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+              is24Hour={true}
+              onChange={onDateSelected}
+              // style={styleSheet.datePicker}
             />
-            <View style={{alignSelf: 'center'}}>
-              <Text style={{fontSize: 22, color: 'grey'}}>
-                Achint Srivastava
-              </Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>
-                Number: 1234567890
+          )}
+
+          {!datePicker && (
+            <View style={{margin: 10}}>
+              <TouchableOpacity
+                onPress={showDatePicker}
+                style={styles.button_to}>
+                <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                  Choose date
+                </Text>
+              </TouchableOpacity>
+              <Text style={{color: 'blue', fontSize: 16, textAlign: 'center'}}>
+                Set LMP date is : {date.toDateString()}
               </Text>
             </View>
-          </View>
-        </TouchableOpacity>
-        {/* </View> */}
-
-        {/* <View style={{ marginTop: 15 }}> */}
-        <View style={styles.ques2}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="LMP"
-            placeholderTextColor="grey"
-          />
-          {/* <Text style={{ marginBottom: 5 }}>
-            Pressing Complaints of patient and duration
-          </Text> */}
+          )}
+          {/* </View> */}
         </View>
-
-        <View style={styles.ques2}>
-          <TextInput
-            style={styles.textInput}
-            placeholder="Antenatal Investigations"
-            placeholderTextColor="grey"
-          />
-          {/* <Text style={{ marginBottom: 5 }}>
-            Pressing Complaints of patient and duration
-          </Text> */}
-        </View>
-        {/* </View> */}
 
         <View>
           <TouchableOpacity
             style={styles.button_to}
-            onPress={() => navigation.navigate('Obstetric')}>
+            onPress={() => navigation.navigate('Obstetric', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
               Obstetric History
             </Text>
           </TouchableOpacity>
         </View>
 
-        {/* <View>
+        <View>
           <TouchableOpacity
             style={styles.button_to}
-            // onPress={() => navigation.navigate('AntePres')}
-          >
+            onPress={() => navigation.navigate('AnteTable', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
               Antenatal Investigations
             </Text>
           </TouchableOpacity>
-        </View> */}
+        </View>
 
         <View>
           <TouchableOpacity
             style={styles.button_to}
-            onPress={() => navigation.navigate('USGReport')}>
+            onPress={() => navigation.navigate('USGTable', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>USG Reports</Text>
           </TouchableOpacity>
         </View>
@@ -110,13 +119,12 @@ export default function AntePres({navigation}) {
         <View>
           <TouchableOpacity
             style={styles.button_to}
-            onPress={() => navigation.navigate('AnteExam')}>
+            onPress={() => navigation.navigate('AnteMonit', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
-              Antenatal Examination
+              Antenatal Monitoring
             </Text>
           </TouchableOpacity>
         </View>
-
         {/* <View>
           <TouchableOpacity
             style={styles.button_to}
@@ -136,9 +144,7 @@ export default function AntePres({navigation}) {
             <Text style={{fontSize: 18, fontWeight: '600'}}>Previous</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button_to}
-            onPress={() => navigation.navigate('PhyExam')}>
+          <TouchableOpacity style={styles.button_to} onPress={handleNext}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>Next</Text>
           </TouchableOpacity>
           {/* </View> */}

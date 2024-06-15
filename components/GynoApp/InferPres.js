@@ -12,8 +12,23 @@ import {
 } from 'react-native';
 import {styles} from '../../assets/Style/styles';
 import {SearchBar} from 'react-native-elements';
+import PatCard from './PatCard';
 
-export default function InferPres({navigation}) {
+export default function InferPres({navigation, route}) {
+  const [inferNotes, setInferNotes] = useState('');
+
+  let Presc_data = route.params;
+
+  const handleNext = () => {
+    Presc_data = {
+      ...Presc_data,
+      inferNotes,
+    };
+
+    console.log('In Infertility Presc', Presc_data);
+    navigation.navigate('FemPartner', Presc_data);
+  };
+
   return (
     <View style={styles.container}>
       {/* <View> */}
@@ -21,56 +36,31 @@ export default function InferPres({navigation}) {
       {/* <Text>Prescriptions</Text> */}
       {/* </View> */}
       <ScrollView style={styles.contentContainer}>
-        {/* <View style={{ marginTop: 0 }}> */}
-        <TouchableOpacity
-          style={{
-            // borderWidth: 2,
-            // borderColor: "grey",
-            marginVertical: 10,
-            borderRadius: 20,
-            backgroundColor: '#bdf0d2',
-          }}>
-          <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-            <Image
-              source={require('../../assets/icons/female.png')}
-              style={{
-                height: 40,
-                width: 40,
-                marginHorizontal: 20,
-                justifyContent: 'center',
-                alignSelf: 'center',
-              }}
-            />
-            <View style={{alignSelf: 'center'}}>
-              <Text style={{fontSize: 22, color: 'grey'}}>
-                Achint Srivastava
-              </Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>Age: 24 years</Text>
-              <Text style={{fontSize: 18, color: 'grey'}}>
-                Number: 1234567890
-              </Text>
-            </View>
-          </View>
-        </TouchableOpacity>
-        {/* </View> */}
+        <PatCard
+          Id={Presc_data.patId}
+          Name={Presc_data.patName}
+          Age={Presc_data.patAge}
+          Num={Presc_data.patPhone}
+        />
 
         {/* <View style={{ marginTop: 15 }}> */}
         <View style={styles.ques2}>
+          <Text style={styles.quesText}>H/o Infertility Treatment</Text>
           <TextInput
             style={styles.textInput}
-            placeholder="H/o Infertility Treatment"
+            multiline
+            placeholder="For extra notes"
             placeholderTextColor="grey"
+            value={inferNotes}
+            onChangeText={value => setInferNotes(value)}
           />
-          <Text style={{marginBottom: 5, color: 'grey'}}>
-            For any extra notes
-          </Text>
         </View>
         {/* </View> */}
 
         <View>
           <TouchableOpacity
             style={styles.button_to}
-            onPress={() => navigation.navigate('PatInvest')}>
+            onPress={() => navigation.navigate('FemPartner', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
               Patient Investigations
             </Text>
@@ -80,7 +70,7 @@ export default function InferPres({navigation}) {
         <View>
           <TouchableOpacity
             style={styles.button_to}
-            onPress={() => navigation.navigate('HusbInvest')}>
+            onPress={() => navigation.navigate('HusbPartner', Presc_data)}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>
               Husband Investigations
             </Text>
@@ -106,9 +96,7 @@ export default function InferPres({navigation}) {
             <Text style={{fontSize: 18, fontWeight: '600'}}>Previous</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            style={styles.button_to}
-            onPress={() => navigation.navigate('PatInvest')}>
+          <TouchableOpacity style={styles.button_to} onPress={handleNext}>
             <Text style={{fontSize: 18, fontWeight: '600'}}>Next</Text>
           </TouchableOpacity>
           {/* </View> */}
