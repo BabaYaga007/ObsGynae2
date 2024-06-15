@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {StyleSheet} from 'react-native';
 
 const styles = StyleSheet.create({
@@ -50,28 +51,34 @@ const styles = StyleSheet.create({
   },
   ques: {
     // color: 'black',
-    borderColor: '#0000ff',
-    borderWidth: 2,
+    // borderColor: '#0000ff',
+    // borderWidth: 2,
     // marginBottom: 5,
     borderRadius: 10,
     // paddingLeft: 10,
     // paddingRight: 10,
-    marginVertical: 10,
+    marginVertical: 5,
   },
   ques2: {
     // backgroundColor: "",
-    borderColor: '#0000ff',
-    borderWidth: 2,
+    // borderColor: '#0000ff',
+    // borderWidth: 2,
     // marginBottom: 5,
     borderRadius: 10,
     // paddingLeft: 10,
     // paddingRight: 10,
-    marginVertical: 10,
+    marginVertical: 3,
+
+    elevation: 6,
+    shadowColor: 'green',
+    shadowOpacity: 0.6,
+    shadowOffset: {width: 0, height: 4},
+    shadowRadius: 10,
   },
   quesText: {
     fontSize: 15,
     color: 'black',
-    backgroundColor: '#b3e6ff',
+    backgroundColor: '#8fbcf7',
     paddingHorizontal: 5,
     paddingVertical: 5,
     borderTopLeftRadius: 7,
@@ -79,11 +86,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   textInput: {
-    // backgroundColor: '#b3e6ff',
+    backgroundColor: 'white',
     color: 'black',
     paddingLeft: 10,
     fontSize: 16,
-    borderRadius: 7,
+    borderBottomLeftRadius: 7,
+    borderBottomRightRadius: 7,
     // margin: 5,
   },
   textInputImage: {
@@ -103,7 +111,7 @@ const styles = StyleSheet.create({
     marginVertical: 5,
   },
   naviButton: {
-    // marginVertical: 5,
+    marginBottom: 5,
     flexDirection: 'row',
     justifyContent: 'space-evenly',
   },
@@ -138,15 +146,56 @@ const styles = StyleSheet.create({
     // width: 100,
     backgroundColor: '#4d79ff',
     // backgroundColor: '#9f99de',
-    padding: 10,
+    padding: 8,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVertical: 5,
+    // marginBottom: 10,
   },
   button_to_text: {
     fontSize: 18,
     fontWeight: '600',
+  },
+  presc_plus: {
+    width: 35,
+    height: 35,
+    marginRight: 20,
+  },
+  presc: {
+    // height: 40,
+    marginHorizontal: 5,
+    marginTop: 5,
+    backgroundColor: '#a5adb8',
+    borderRadius: 5,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 5,
+  },
+  presc_text: {
+    color: 'black',
+    marginLeft: 10,
+    fontSize: 16,
+  },
+
+  presc2: {
+    // height: 40,
+    marginHorizontal: 5,
+    marginTop: 5,
+    backgroundColor: '#a5adb8',
+    borderRadius: 5,
+    // justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingRight: 5,
+  },
+
+  presc_text2: {
+    color: 'black',
+    marginRight: 10,
+    fontSize: 16,
+    paddingRight: 22,
   },
 });
 
